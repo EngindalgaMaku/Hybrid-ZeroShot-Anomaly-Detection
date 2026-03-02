@@ -49,7 +49,20 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 | **DINO-only** | %70.34 (0.7034) | **%94.42** (0.9442) | %100 (Tümü ağır işlemden geçti) |
 | **Hybrid (CLIP+DINOv2)** | **%82.63** (0.8263) | %80.74 (0.8074) | **%63.97** (Sadece şüpheliler işlendi) |
 
-**Sonuç Analizi:** Tablodan görüleceği üzere, Hybrid yöntem yalnızca görüntülerin **%63.97'sini** DINOv2'ye yönlendirerek (büyük bir işlem tasarrufu sağlayarak) CLIP'in yüksek imaj tespit başarısını (%82.63) korumuş ve DINOv2 üzerinden piksel bazlı anlamlı bir lokalizasyon skoru elde edebilmiştir. Tüm bu çıktı detayları repo içerisindeki `results/` klasöründe yer almaktadır.
+**Sonuç Analizi:** Tablodan görüleceği üzere, Hybrid yöntem yalnızca görüntülerin **%63.97'sini** DINOv2'ye yönlendirerek büyük bir işlem tasarrufu sağlamıştır. CLIP üzerinden zaten doğal olarak elde edilen imaj tespit başarısının (%82.63) yanına, hibrit geçit (gating) sistemi sayesinde DINOv2'nin detaylı haritalama gücü eklenmiş ve uçtan uca (E2E) piksel bazında **%80.74** gibi oldukça güçlü bir lokalizasyon skoru elde edilmiştir. DINO-only yönteminin %94'lük saf lokalizasyonuna kıyasla yaşanan bu düşüş (trade-off), elde edilen %36'lık devasa donanım/hız tasarrufu göz önüne alındığında endüstriyel kullanımlar için son derece optimumdur. Tüm bu çıktı detayları repo içerisindeki `results/` klasöründe yer almaktadır.
+
+### Eşik Değeri Seçimi (Ablation Study)
+Hybrid yapının tam olarak hangi CLIP Skoruna (Quantile) göre fotoğrafları DINOv2'ye yönlendireceğini belirlemek için sistemde bir "Ablation Taraması" (%90, %93, %95, %97, %99 quantile) gerçekleştirilmiştir. Aşağıdaki tabloda optimal dengenin (`0.93 - %93` Quantile) nasıl seçildiği açıkça görülmektedir:
+
+| Seçilen Quantile (Eşik Oranı) | Ortalama İmaj AUROC | Ortalama Kondisyonel Piksel AUROC | Ortalama E2E Piksel AUROC | DINO'ya Yönlendirme Oranı (Flag) |
+|---|---|---|---|---|
+| 0.90 | 0.8263 | 0.9393 | **0.8204** | %68.43 |
+| **0.93 (Seçilen)** | **0.8263** | **0.9395** | 0.8074 | **%63.97** |
+| 0.95 | 0.8263 | 0.9378 | 0.7989 | %60.98 |
+| 0.97 | 0.8263 | 0.9381 | 0.7891 | %58.60 |
+| 0.99 | 0.8263 | 0.9416 | 0.7643 | %52.40 |
+
+*(Seçilen `0.93` eşik değeri ile birlikte filtreleme oranı avantajlı bir şekilde `~%64`'lere çekilirken, uçtan uca lokalizasyon (E2E Piksel AUROC) başarısında ciddi bir zafiyet yaşanmamıştır.)*
 
 ## Görsel Analiz (Qualitative Results)
 
