@@ -23,6 +23,12 @@ Bu çalışmada, endüstriyel görsel hata tespiti (industrial visual anomaly de
 Veri setini incelemek ve indirmek için resmi bağlantıyı ziyaret edebilirsiniz:  
 🔗 [MVTec AD Dataset Official Page](https://www.mvtec.com/company/research/datasets/mvtec-ad)
 
+## Motivasyon ve Araştırma Kapsamı (Scope)
+
+**Önemli Not:** Bu çalışmanın birincil amacı, mevcut literatürdeki en yüksek (State-of-the-Art / SOTA) anomali tespit skorunu elde etmek **değildir.** 
+Ana motivasyonumuz; CLIP gibi görüntü bazında (image-level) oldukça hızlı çalışan ancak lokalizasyon yeteneği olmayan bir model ile, DINOv2 gibi piksel bazında (pixel-level) çok detaylı ve başarılı lokalizasyon yapabilen ancak hesaplama maliyeti yüksek bir modeli **hibrit (melez)** bir yapıda birleştirmektir. 
+Bu "ön-filtreleme" (gating) konsepti sayesinde, endüstriyel üretim hatlarında saniyeler içinde binlerce normal ürünü düşük donanım maliyetiyle eleyip, sadece şüpheli ("flagged") ürünleri ağır anomali haritalandırmasına (DINOv2) sokarak **hız ve doğruluk (işlem maliyeti) arasında optimum bir denge** kurulabileceği kanıtlanmaktadır.
+
 ## Kullanılan Teknolojiler ve Tekrarlanabilirlik
 
 - **OpenAI CLIP**: Görüntü bazlı genel anomali özelliklerini çıkarmak ve filtrelemek için.
@@ -32,6 +38,30 @@ Veri setini incelemek ve indirmek için resmi bağlantıyı ziyaret edebilirsini
   - **Kullanılan cihaz**: `cuda`
   - **GPU**: NVIDIA RTX PRO 6000 Blackwell Server Edition
   - **GPU Belleği**: 101.97 GB
+
+## Deneysel Sonuçlar (Experimental Results)
+
+MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı deney sonuçlarının ortalamaları aşağıda özetlenmiştir. Hibrit yaklaşım için CLIP eşik değeri (threshold quantile) **0.93** olarak seçilmiştir:
+
+| Yöntem | Ortalama İmaj AUROC | Ortalama Piksel AUROC | Filtrelenen (Flagged) Oranı |
+|---|---|---|---|
+| **CLIP-only** | **%82.63** (0.8263) | - (Lokalizasyon Yok) | %100 (Tümü incelendi) |
+| **DINO-only** | %70.34 (0.7034) | **%94.42** (0.9442) | %100 (Tümü ağır işlemden geçti) |
+| **Hybrid (CLIP+DINOv2)** | **%82.63** (0.8263) | %80.74 (0.8074) | **%63.97** (Sadece şüpheliler işlendi) |
+
+**Sonuç Analizi:** Tablodan görüleceği üzere, Hybrid yöntem yalnızca görüntülerin **%63.97'sini** DINOv2'ye yönlendirerek (büyük bir işlem tasarrufu sağlayarak) CLIP'in yüksek imaj tespit başarısını (%82.63) korumuş ve DINOv2 üzerinden piksel bazlı anlamlı bir lokalizasyon skoru elde edebilmiştir. Tüm bu çıktı detayları repo içerisindeki `results/` klasöründe yer almaktadır.
+
+## Görsel Analiz (Qualitative Results)
+
+Hibrit anomali tespit pipeline'ının nasıl çalıştığını göstermek adına üretilen 3-panelli kalitatif görseller aşağıdadır. 
+**[Panel 1]** Görüntü ve CLIP Eşik Durumu | **[Panel 2]** Ground Truth Hata Maskesi | **[Panel 3]** DINOv2 Isı Haritası (Heatmap) Lokalizasyonu
+
+![Bottle Anomaly Example](results/qual_panels_balanced/bottle/bottle_00_flagT_clip0.028.png)
+![Capsule Anomaly Example](results/qual_panels_balanced/capsule/capsule_00_flagT_clip0.059.png)
+![Carpet Anomaly Example](results/qual_panels_balanced/carpet/carpet_00_flagT_clip0.046.png)
+![Grid Anomaly Example](results/qual_panels_balanced/grid/grid_00_flagT_clip0.035.png)
+
+*(Daha fazla görsel örnek ve detay `results/qual_panels_balanced/` dizini altında bulunabilir.)*
 
 ## Çıktılar ve Analiz
 
