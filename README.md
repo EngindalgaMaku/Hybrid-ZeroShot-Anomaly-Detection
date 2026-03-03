@@ -1,5 +1,7 @@
 # Hybrid-ZeroShot-Anomaly-Detection
 
+> 🌐 **[English Version (İngilizce)](README_EN.md)** | **Türkçe** ✓
+
 Bu proje, **CLIP** ve **DINOv2** modellerini kullanarak üretim/sanayi verilerinde (örn. MVTec AD veri seti) sıfır-örneklem (zero-shot) anomali tespiti yapmayı amaçlayan melez (hibrit) bir yaklaşım sunmaktadır. Bu çalışma, konuyla ilgili akademik bir makale için hazırlanmış olup kodun tam ve çalıştırılabilir halini içermektedir.
 
 ## Yöntemler ve Yaklaşımlar
