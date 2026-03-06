@@ -1,9 +1,0 @@
-{
-  "method": "hybrid",
-  "total_runtime_s": 1213.0225932598114,
-  "mean_auroc_img": 0.826303502471387,
-  "mean_auroc_pix_cond": 0.9388038063942354,
-  "mean_auroc_pix_e2e": 0.8074036686262104,
-  "mean_flag_rate": 0.639732263637925,
-  "mean_runtime_s": 80.84315428733825
-}

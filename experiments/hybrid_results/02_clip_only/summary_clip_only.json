@@ -1,0 +1,6 @@
+{
+  "method": "clip_only",
+  "total_runtime_s": 96.71151328086853,
+  "mean_auroc_img": 0.8258385594072901,
+  "mean_runtime_s": 6.44709358215332
+}

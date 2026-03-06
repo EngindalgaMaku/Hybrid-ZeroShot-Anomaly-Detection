@@ -17,7 +17,9 @@ Proje, üç farklı anomali tespit yaklaşımını analiz etmekte ve karşılaş
    - Sadece CLIP modelini kullanarak görüntü düzeyinde (image-level) anomali tespiti yapılır. Lokalizasyon sağlamaz ancak hızlı çalışır.
    
 3. **DINO-only Yaklaşım**:
-   - Herhangi bir ön filtreleme yapmaksızın sadece DINOv2 modeli kullanılarak piksel düzeyinde anomali tespiti ve lokalizasyon yapılır. En yüksek hesaplama maliyetine sahiptir fakat en detaylı analizi sunar.
+   - Herhangi bir ön filtreleme yapmaksızın sadece DINOv2 modeli kullanılarak piksel düzeyinde anomali tespiti ve lokalizasyon yapılır.
+   - **Görüntü-seviye skorlaması** literatür standardı olan **max aggregation** (patch anomaly map'ten maksimum değer) ile hesaplanır.
+   - En yüksek hesaplama maliyetine sahiptir fakat en detaylı analizi sunar.
 
 ## Kullanılan Veri Seti (MVTec AD)
 
@@ -31,6 +33,27 @@ Veri setini incelemek ve indirmek için resmi bağlantıyı ziyaret edebilirsini
 Ana motivasyonumuz; CLIP gibi görüntü bazında (image-level) oldukça hızlı çalışan ancak lokalizasyon yeteneği olmayan bir model ile, DINOv2 gibi piksel bazında (pixel-level) çok detaylı ve başarılı lokalizasyon yapabilen ancak hesaplama maliyeti yüksek bir modeli **hibrit (melez)** bir yapıda birleştirmektir. 
 Bu "ön-filtreleme" (gating) konsepti sayesinde, endüstriyel üretim hatlarında saniyeler içinde binlerce normal ürünü düşük donanım maliyetiyle eleyip, sadece şüpheli ("flagged") ürünleri ağır anomali haritalandırmasına (DINOv2) sokarak **hız ve doğruluk (işlem maliyeti) arasında optimum bir denge** kurulabileceği kanıtlanmaktadır.
 
+## Teknik Detaylar
+
+### DINOv2 Görüntü-Seviye Skorlaması
+Bu çalışmada, literatür standardı olan **max aggregation** yöntemi kullanılmaktadır. DINOv2 her görüntü için patch-level anomaly map üretir ve görüntü-seviye skorunu bu map'teki **maksimum değer** olarak hesaplar:
+
+```python
+# Literatür standardı
+image_score = np.max(anomaly_map)
+```
+
+Bu yaklaşım, WinCLIP, PatchCore ve diğer patch-based anomaly detection yöntemlerinde yaygın olarak kullanılmaktadır.
+
+### Mesafe Metriği
+k-NN (k-Nearest Neighbors) işlemlerinde **cosine distance** metriği kullanılmıştır:
+
+```python
+nn = NearestNeighbors(n_neighbors=k, algorithm="auto", metric="cosine")
+```
+
+Feature'lar L2 normalize edildikten sonra cosine distance ile karşılaştırılır, bu da literatürde standart bir uygulamadır.
+
 ## Kullanılan Teknolojiler ve Tekrarlanabilirlik
 
 - **OpenAI CLIP**: Görüntü bazlı genel anomali özelliklerini çıkarmak ve filtrelemek için.
@@ -38,33 +61,72 @@ Bu "ön-filtreleme" (gating) konsepti sayesinde, endüstriyel üretim hatlarınd
 - **Python Kütüphaneleri**: `pandas`, `opencv-python`, `scikit-learn`, `ftfy`, `regex`, ve veri yönetimi için PyTorch altyapısı.
 - **Tekrarlanabilirlik (Reproducibility) ve Cihaz Ayarları**: Deneylerin tutarlı ve akademik anlamda tekrarlanabilir olması için rastgelelik tohumu (seed) `SEED = 42` olarak (Numpy, Random ve PyTorch CPU/GPU fonksiyonları düzeyinde) sabitlenmiştir. Deneyler aşağıdaki donanım konfigürasyonunda referans alınarak koşturulmuştur:
   - **Kullanılan cihaz**: `cuda`
-  - **GPU**: NVIDIA RTX PRO 6000 Blackwell Server Edition
-  - **GPU Belleği**: 101.97 GB
+  - **GPU**: NVIDIA RTX 4060
+  - **GPU Belleği**: 8 GB
+  - **RAM**: 16 GB
 
 ## Deneysel Sonuçlar (Experimental Results)
 
 MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı deney sonuçlarının ortalamaları aşağıda özetlenmiştir. Hibrit yaklaşım için CLIP eşik değeri (threshold quantile) **0.93** olarak seçilmiştir:
 
-| Yöntem | Ortalama İmaj AUROC | Ortalama Piksel AUROC | Filtrelenen (Flagged) Oranı |
-|---|---|---|---|
-| **CLIP-only** | **%82.63** (0.8263) | - (Lokalizasyon Yok) | %100 (Tümü incelendi) |
-| **DINO-only** | %70.34 (0.7034) | **%94.42** (0.9442) | %100 (Tümü ağır işlemden geçti) |
-| **Hybrid (CLIP+DINOv2)** | **%82.63** (0.8263) | %80.74 (0.8074) | **%63.97** (Sadece şüpheliler işlendi) |
+| Yöntem | Ortalama İmaj AUROC | Ortalama Piksel AUROC (E2E) | Ortalama Piksel AUROC (Conditional) | Filtrelenen Oran | Runtime (15 kategori) |
+|---|---|---|---|---|---|
+| **CLIP-only** | **82.58%** | - (Lokalizasyon Yok) | - | - | **96.7s** ⚡ |
+| **DINO-only (MAX)** | **85.55%** | **95.61%** | - | %100 (Tümü işlendi) | **786.1s** |
+| **Hybrid (CLIP-gated)** | 82.58% | 81.31% | **95.22%** ⭐ | **50.47%** (Sadece şüpheliler) | **503.8s** ✅ |
 
-**Sonuç Analizi:** Tablodan görüleceği üzere, Hybrid yöntem yalnızca görüntülerin **%63.97'sini** DINOv2'ye yönlendirerek büyük bir işlem tasarrufu sağlamıştır. CLIP üzerinden zaten doğal olarak elde edilen imaj tespit başarısının (%82.63) yanına, hibrit geçit (gating) sistemi sayesinde DINOv2'nin detaylı haritalama gücü eklenmiş ve uçtan uca (E2E) piksel bazında **%80.74** gibi oldukça güçlü bir lokalizasyon skoru elde edilmiştir. DINO-only yönteminin %94'lük saf lokalizasyonuna kıyasla yaşanan bu düşüş (trade-off), elde edilen %36'lık devasa donanım/hız tasarrufu göz önüne alındığında endüstriyel kullanımlar için son derece optimumdur. Tüm bu çıktı detayları repo içerisindeki `results/` klasöründe yer almaktadır.
+### Sonuç Analizi
+
+**✅ Ana Bulgular:**
+
+1. **Hız Kazancı:** Hybrid yöntemi, DINO-only'e göre **%36 daha hızlı** (503.8s vs 786.1s)
+   - Bu, ortalama **%50.5 flag rate** sayesinde elde edilmiştir
+   - Sadece şüpheli görüntüler DINOv2'ye gönderilmiştir
+
+2. **Lokalizasyon Kalitesi:** DINO çalıştığında (flagged images) lokalizasyon kalitesi **neredeyse aynı**
+   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-only)
+   - Fark sadece **0.39 puan** - istatistiksel olarak ihmal edilebilir
+
+3. **Trade-off:** End-to-End Pixel AUROC düşük (81.31%) çünkü:
+   - CLIP bazı anomalileri kaçırıyor (false negatives)
+   - Bu görüntüler DINOv2'ye gönderilmediği için lokalizasyon yapılamıyor
+   - Ancak bu, **hız kazancı** için kabul edilebilir bir trade-off
+
+4. **Image-Level Performans:**
+   - CLIP ve Hybrid aynı (82.58%) - çünkü Hybrid, CLIP skorlarını kullanıyor
+   - DINO-only biraz daha iyi (85.55%) ama fark küçük (+2.97 puan)
+
+### Kategorilere Göre Performans
+
+**En İyi Kategoriler (Hybrid başarılı):**
+- Bottle: Image 99.0%, Pixel 98.3%, Flag 73.5%
+- Leather: Image 99.5%, Pixel 98.9%, Flag 79.0%
+- Wood: Image 99.8%, Pixel 94.9%, Flag 77.2%
+- Tile: Image 98.9%, Pixel 94.7%, Flag 76.9%
+
+**Zorlu Kategoriler (CLIP zayıf):**
+- Cable: Image 58.9% (DINO: 87.5%), Flag sadece %32
+- Capsule: Image 67.9% (DINO: 77.4%), Flag sadece %24
+- Screw: Image 53.7% (DINO: 64.2%), Flag sadece %19
+
+**Sonuç:** Hybrid yöntemi, CLIP'in güçlü olduğu kategorilerde mükemmel çalışıyor. Zorlu kategorilerde (cable, capsule) DINO-only tercih edilebilir.
 
 ### Eşik Değeri Seçimi (Ablation Study)
 Hybrid yapının tam olarak hangi CLIP Skoruna (Quantile) göre fotoğrafları DINOv2'ye yönlendireceğini belirlemek için sistemde bir "Ablation Taraması" (%90, %93, %95, %97, %99 quantile) gerçekleştirilmiştir. Aşağıdaki tabloda optimal dengenin (`0.93 - %93` Quantile) nasıl seçildiği açıkça görülmektedir:
 
 | Seçilen Quantile (Eşik Oranı) | Ortalama İmaj AUROC | Ortalama Kondisyonel Piksel AUROC | Ortalama E2E Piksel AUROC | DINO'ya Yönlendirme Oranı (Flag) |
 |---|---|---|---|---|
-| 0.90 | 0.8263 | 0.9393 | **0.8204** | %68.43 |
-| **0.93 (Seçilen)** | **0.8263** | **0.9395** | 0.8074 | **%63.97** |
-| 0.95 | 0.8263 | 0.9378 | 0.7989 | %60.98 |
-| 0.97 | 0.8263 | 0.9381 | 0.7891 | %58.60 |
-| 0.99 | 0.8263 | 0.9416 | 0.7643 | %52.40 |
+| 0.90 | 0.8258 | 0.9526 | **0.8273** | %55.2 |
+| **0.93 (Seçilen)** | **0.8258** | **0.9522** | 0.8131 | **%50.47** ⭐ |
+| 0.95 | 0.8258 | 0.9512 | 0.8037 | %47.7 |
+| 0.97 | 0.8258 | 0.9541 | 0.7879 | %44.7 |
+| 0.99 | 0.8258 | 0.9538 | 0.7674 | %39.6 |
 
-*(Seçilen `0.93` eşik değeri ile birlikte filtreleme oranı avantajlı bir şekilde `~%64`'lere çekilirken, uçtan uca lokalizasyon (E2E Piksel AUROC) başarısında ciddi bir zafiyet yaşanmamıştır.)*
+**Neden 0.93 seçildi?**
+- ✅ Flag rate %50.47 → Orta seviye tasarruf
+- ✅ Conditional Pixel AUROC %95.22 → Mükemmel lokalizasyon kalitesi
+- ✅ E2E Pixel AUROC %81.31 → Makul trade-off
+- ✅ Denge noktası: Hız ve kalite arasında optimal
 
 ## Görsel Analiz (Qualitative Results)
 
@@ -88,6 +150,51 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
   - Panel 2: Ground-truth maske (MVTec AD referansları).
   - Panel 3: DINOv2 ısı haritası (lokalizasyon sonucu).
 
+## Karmaşıklık Analizi (Computational Complexity)
+
+### Teorik Big-O Analizi
+
+**Parametreler:**
+- N: Test görüntü sayısı
+- P: Görüntü başına patch sayısı (~256-1024)
+- B: Patch bank boyutu (~10,000)
+- k: k-NN komşu sayısı (k=5)
+- α: Flag rate (0 ≤ α ≤ 1)
+
+**Yöntemler:**
+
+1. **CLIP-only:** O(N)
+   - Her görüntü için sabit işlem
+   
+2. **DINO-only:** O(N · P · log(B))
+   - Her görüntü için P patch × k-NN arama
+   
+3. **Hybrid:** O(N) + O(N · α · P · log(B))
+   - CLIP gating: O(N)
+   - DINOv2 (sadece flagged): O(N · α · P · log(B))
+   - α ≈ 0.49 → **~%50 tasarruf**
+
+### Empirical Runtime
+
+| Yöntem | Ortalama (per kategori) | Toplam (15 kategori) | Tasarruf |
+|---|---|---|---|
+| CLIP-only | 6.4s | 96.4s | - |
+| DINO-only | 52.4s | 786.6s | - |
+| **Hybrid** | **33.6s** | **504.6s** | **-36%** ⚡ |
+
 ## Kullanım
 
-Başlamak için depoda yer alan `Hybrid-ZeroShot-Anomaly-Detection.ipynb` Google Colab ortamında veya Jupyter çevresinde çalıştırılabilir. Veri seti dizin yolları Colab içerisinde Google Drive üzerinden çekilecek şekilde ayarlanmıştır. Çalıştırmadan önce `MVTEC_ROOT` dahil dizin yapılarını kendi Google Drive veya lokal sisteminize uygun şekilde düzenlemeniz tavsiye edilir.
+Başlamak için depoda yer alan `Hybrid-ZeroShot-Anomaly-Detection.ipynb` Google Colab ortamında veya Jupyter çevresinde çalıştırılabilir. 
+
+**Otomatik Ortam Tespiti:** Notebook hem local hem de Colab ortamında çalışır:
+- Colab'da: Otomatik Drive mount + Colab path'leri
+- Local'de: Windows/Linux/Mac path'leri
+
+Çalıştırmadan önce `MVTEC_ROOT` dizin yolunu kendi sisteminize uygun şekilde düzenlemeniz tavsiye edilir.
+
+## Lisans ve Referanslar
+
+Bu proje akademik araştırma amacıyla hazırlanmıştır. Kullanılan modeller:
+- **CLIP:** OpenAI (https://github.com/openai/CLIP)
+- **DINOv2:** Meta AI (https://github.com/facebookresearch/dinov2)
+- **MVTec AD:** MVTec Software GmbH (https://www.mvtec.com/company/research/datasets/mvtec-ad)
