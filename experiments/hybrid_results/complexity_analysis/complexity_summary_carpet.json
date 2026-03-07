@@ -2,24 +2,24 @@
   "category": "carpet",
   "methods": {
     "CLIP": {
-      "slope": 0.9567356424204755,
+      "slope": 1.0349083212011398,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.714256763458252,
+      "avg_runtime_s": 1.4494675795237224,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 0.9761873463413109,
+      "slope": 1.0312517151345493,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.177084922790527,
+      "avg_runtime_s": 11.071498076121012,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.879605306893617,
+      "slope": 0.9215521825449067,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.98768393198649,
+      "avg_runtime_s": 10.629705111185709,
       "n_samples": 3
     }
   }

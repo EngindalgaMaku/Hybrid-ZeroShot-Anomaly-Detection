@@ -2,24 +2,24 @@
   "category": "wood",
   "methods": {
     "CLIP": {
-      "slope": 1.016886929803819,
+      "slope": 1.0415664691745854,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.6901066303253174,
+      "avg_runtime_s": 1.3934672673543294,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 0.9875357499565814,
+      "slope": 1.027264356638058,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 12.09283447265625,
+      "avg_runtime_s": 11.362257321675619,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.7376864050262469,
+      "slope": 0.738126452709857,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.345191558202108,
+      "avg_runtime_s": 9.186874389648438,
       "n_samples": 3
     }
   }

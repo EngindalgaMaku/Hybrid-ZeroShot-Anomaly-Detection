@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-hazelnut,CLIP,0.989,O(N),1.54
-hazelnut,DINO,0.996,O(N),11.46
-hazelnut,Hybrid,0.577,O(N),7.11
+hazelnut,CLIP,1.018,O(N),1.35
+hazelnut,DINO,1.019,O(N),11.46
+hazelnut,Hybrid,0.593,O(N),7.08

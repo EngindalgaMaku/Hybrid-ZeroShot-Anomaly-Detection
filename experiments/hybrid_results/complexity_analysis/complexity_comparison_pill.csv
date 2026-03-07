@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-pill,CLIP,0.980,O(N),1.06
-pill,DINO,1.016,O(N),10.88
-pill,Hybrid,1.010,O(N),4.59
+pill,CLIP,0.988,O(N),1.02
+pill,DINO,1.009,O(N),10.95
+pill,Hybrid,0.979,O(N),4.58

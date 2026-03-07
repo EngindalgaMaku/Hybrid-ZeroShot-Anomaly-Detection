@@ -2,24 +2,24 @@
   "category": "screw",
   "methods": {
     "CLIP": {
-      "slope": 0.9873323910945965,
+      "slope": 1.0317808996024393,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 0.9552357991536459,
+      "avg_runtime_s": 0.7354505062103271,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0186323046375803,
+      "slope": 1.026220835027826,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.937118927637735,
+      "avg_runtime_s": 10.602672735850016,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 1.2000805623322923,
+      "slope": 1.2263639646662934,
       "complexity_class": "O(N^1.5)",
       "description": "Superlinear",
-      "avg_runtime_s": 2.3879640102386475,
+      "avg_runtime_s": 2.244511683781942,
       "n_samples": 3
     }
   }

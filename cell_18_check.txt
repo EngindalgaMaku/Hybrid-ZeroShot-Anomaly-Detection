@@ -1,0 +1,71 @@
+# ============================================
+# DINO-ONLY (MAX AGGREGATION - Literatür Standardı)
+# ============================================
+
+def run_category_dino_only_MAX(category, dino_ref_imgs=30, knn_k=5, eval_size=256, apply_smoothing=False):
+    """
+    DINO-only: Literatür standardı - max(anomaly_map) for image score.
+    
+    Pipeline:
+    1. Build patch bank from training images
+    2. For each test image:
+       - Extract patch features
+       - Compute k-NN distances → anomaly map
+       - Image score = max(anomaly_map) ← STANDARD!
+    
+    Args:
+        category: MVTec category
+        dino_ref_imgs: Number of training images for patch bank
+        knn_k: k for k-NN
+        eval_size: Output anomaly map size
+        apply_smoothing: Apply Gaussian blur to anomaly map
+    
+    Returns:
+        dict: Results with auroc_img, auroc_pix_e2e
+    """
+    train_good, test_items = get_mvtec_paths(MVTEC_ROOT, category)
+    
+    # Build patch bank (NO CLS bank needed!)
+    patch_bank = build_dino_patch_bank(train_good, max_images=dino_ref_imgs, max_patches_per_image=400, seed=42)
+    bank_cs = coreset_subsample(patch_bank, target_size=12000, seed=42)
+    nn_index = build_knn_index(bank_cs, k=knn_k)
+    
+    y_img, s_img = [], []
+    y_pix, s_pix = [], []
+    masked_count = 0
+    
+    for (img_path, label, mask_path) in tqdm(test_items, desc=f"Test DINO-MAX {category}"):
+        img = load_image_rgb(img_path, resize=None)
+        
+        # Generate anomaly map
+        amap = dino_anomaly_map_knn(img, nn_index, k=knn_k, out_size=eval_size, apply_smoothing=apply_smoothing)
+        
+        # ✅ LITERATURE STANDARD: MAX AGGREGATION
+        img_score = float(np.max(amap))
+        
+        s_img.append(img_score)
+        y_img.append(label)
+        
+        # Pixel-level evaluation
+        has_gt = (mask_path is not None and os.path.exists(mask_path))
+        if not has_gt:
+            continue
+        
+        masked_count += 1
+        gt = load_mask(mask_path, resize=eval_size).reshape(-1)
+        y_pix.append(gt)
+        s_pix.append(amap.reshape(-1).astype(np.float32))
+    
+    # Compute metrics
+    auroc_img = roc_auc_score(y_img, s_img) if len(np.unique(y_img)) > 1 else float("nan")
+    auroc_pix_e2e = roc_auc_score(np.concatenate(y_pix, axis=0), np.concatenate(s_pix, axis=0)) if len(y_pix) > 0 else float("nan")
+    
+    return {
+        "category": category,
+        "auroc_img": auroc_img,
+        "auroc_pix_e2e": auroc_pix_e2e,
+        "n_masked": int(masked_count),
+        "method": "dino_max"
+    }
+
+print("✅ DINO-MAX fonksiyonu yüklendi (max aggregation)")

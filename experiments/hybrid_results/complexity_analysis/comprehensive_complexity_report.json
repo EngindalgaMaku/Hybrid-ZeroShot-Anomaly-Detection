@@ -1,5 +1,5 @@
 {
-  "analysis_date": "2026-03-06 11:29:45.327106",
+  "analysis_date": "2026-03-07 13:12:22.125265",
   "n_categories": 15,
   "test_counts": [
     10,
@@ -8,26 +8,26 @@
   ],
   "methods": {
     "CLIP": {
-      "avg_slope": 0.9799327635870336,
-      "min_slope": 0.8776207570399363,
-      "max_slope": 1.041036739166967,
-      "std_slope": 0.03960810832805192,
+      "avg_slope": 1.0107858542586023,
+      "min_slope": 0.9154755789527729,
+      "max_slope": 1.0415664691745854,
+      "std_slope": 0.0315060302387136,
       "n_categories": 15,
       "complexity_class": "O(N)"
     },
     "DINO": {
-      "avg_slope": 1.0104339561573663,
-      "min_slope": 0.9746927782767484,
-      "max_slope": 1.0730102183479937,
-      "std_slope": 0.02822276335869226,
+      "avg_slope": 1.0267721107547323,
+      "min_slope": 0.9448568064679467,
+      "max_slope": 1.0786787849380783,
+      "std_slope": 0.02934754572058153,
       "n_categories": 15,
       "complexity_class": "O(N)"
     },
     "Hybrid": {
-      "avg_slope": 1.0796386245298428,
-      "min_slope": 0.5771474951988171,
-      "max_slope": 1.819997208362956,
-      "std_slope": 0.3533276369564171,
+      "avg_slope": 1.0882747541836721,
+      "min_slope": 0.5929714828084761,
+      "max_slope": 1.866944139731028,
+      "std_slope": 0.36570770710806,
       "n_categories": 15,
       "complexity_class": "O(N)"
     }

@@ -1,0 +1,94 @@
+# ============================================
+# HYBRID (CLIP Gating + DINO Localization)
+# ============================================
+
+def run_category_hybrid(category, dino_ref_imgs=30, knn_k=5, eval_size=256,
+                            clip_ref_max=50, clip_thr_quantile=0.93, apply_smoothing=False):
+    """
+    Hybrid: CLIP for gating + DINO for localization.
+    
+    Pipeline:
+    1. CLIP scores all images (fast)
+    2. If CLIP score > threshold: run DINO localization
+       Else: skip DINO
+    
+    Args:
+        category: MVTec category
+        dino_ref_imgs: Number of training images for DINO patch bank
+        knn_k: k for k-NN
+        eval_size: Anomaly map output size
+        clip_ref_max: Number of training images for CLIP reference
+        clip_thr_quantile: CLIP threshold quantile (0.93 = 93rd percentile)
+        apply_smoothing: Apply Gaussian blur
+    
+    Returns:
+        dict: Results with auroc_img, auroc_pix_e2e, auroc_pix_cond, flag_rate
+    """
+    train_good, test_items = get_mvtec_paths(MVTEC_ROOT, category)
+    
+    # 1. CLIP reference
+    clip_ref = build_clip_reference(train_good, max_images=clip_ref_max)
+    clip_thr = estimate_clip_threshold(train_good, clip_ref, max_images=clip_ref_max, quantile=clip_thr_quantile)
+    
+    # 2. DINO patch bank
+    patch_bank = build_dino_patch_bank(train_good, max_images=dino_ref_imgs, max_patches_per_image=400, seed=42)
+    bank_cs = coreset_subsample(patch_bank, target_size=12000, seed=42)
+    nn_index = build_knn_index(bank_cs, k=knn_k)
+    
+    y_img, s_img = [], []
+    y_pix_e2e, s_pix_e2e = [], []  # End-to-end pixel AUROC
+    y_pix_cond, s_pix_cond = [], []  # Conditional (only flagged images)
+    flag_count = 0
+    masked_count = 0
+    
+    for (img_path, label, mask_path) in tqdm(test_items, desc=f"Test Hybrid {category}"):
+        img = load_image_rgb(img_path, resize=None)
+        
+        # Step 1: CLIP gating
+        clip_score = clip_anomaly_score(img, clip_ref)
+        s_img.append(clip_score)
+        y_img.append(label)
+        
+        # Step 2: Conditional DINO
+        has_gt = (mask_path is not None and os.path.exists(mask_path))
+        
+        if clip_score > clip_thr:
+            # CLIP flagged as suspicious → run DINO
+            flag_count += 1
+            amap = dino_anomaly_map_knn(img, nn_index, k=knn_k, out_size=eval_size, apply_smoothing=apply_smoothing)
+        else:
+            # CLIP says normal → skip DINO (set map to zeros)
+            amap = np.zeros((eval_size, eval_size), dtype=np.float32)
+        
+        # Pixel-level metrics
+        if has_gt:
+            masked_count += 1
+            gt = load_mask(mask_path, resize=eval_size).reshape(-1)
+            
+            # E2E: All images (includes CLIP gating errors)
+            y_pix_e2e.append(gt)
+            s_pix_e2e.append(amap.reshape(-1).astype(np.float32))
+            
+            # Conditional: Only flagged images (DINO localization quality)
+            if clip_score > clip_thr:
+                y_pix_cond.append(gt)
+                s_pix_cond.append(amap.reshape(-1).astype(np.float32))
+    
+    # Compute metrics
+    auroc_img = roc_auc_score(y_img, s_img) if len(np.unique(y_img)) > 1 else float("nan")
+    auroc_pix_e2e = roc_auc_score(np.concatenate(y_pix_e2e), np.concatenate(s_pix_e2e)) if len(y_pix_e2e) > 0 else float("nan")
+    auroc_pix_cond = roc_auc_score(np.concatenate(y_pix_cond), np.concatenate(s_pix_cond)) if len(y_pix_cond) > 0 else float("nan")
+    flag_rate = flag_count / len(test_items) if len(test_items) > 0 else 0.0
+    
+    return {
+        "category": category,
+        "auroc_img": auroc_img,
+        "auroc_pix_e2e": auroc_pix_e2e,
+        "auroc_pix_cond": auroc_pix_cond,
+        "flag_rate": flag_rate,
+        "n_flagged": int(flag_count),
+        "n_masked": int(masked_count),
+        "method": "hybrid"
+    }
+
+print("✅ Hybrid (CLIP-gated DINO) fonksiyonu yüklendi (CLIP gating + DINO localization)")

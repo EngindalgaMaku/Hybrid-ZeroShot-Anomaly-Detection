@@ -16,7 +16,7 @@ The project analyzes and compares three different anomaly detection approaches:
 2. **CLIP-only Approach**:
    - Performs image-level anomaly detection using only the CLIP model. Does not provide localization but runs quickly.
    
-3. **DINO-only Approach**:
+3. **DINO-Max Approach**:
    - Performs pixel-level anomaly detection and localization using only the DINOv2 model without any pre-filtering.
    - **Image-level scoring** is calculated using **max aggregation** (maximum value from patch anomaly map), which is the literature standard.
    - Has the highest computational cost but provides the most detailed analysis.
@@ -71,22 +71,22 @@ Average results from comparative experiments on all 15 categories in the MVTec A
 
 | Method | Image AUROC | Pixel AUROC (E2E) | Pixel AUROC (Cond) | Flag Rate | Total | Per Image | FPS |
 |---|---|---|---|---|---|---|---|
-| **CLIP-only** | **82.58%** | - | - | - | 176.7s | 102ms | 9.8 |
-| **DINO-only** | **85.55%** | **95.61%** | - | 100% | 1171.5s | 679ms | 1.5 |
-| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **804.2s** ✅ | 466ms | 2.1 |
+| **CLIP-only** | **82.58%** | - | - | - | 113.1s | 66ms | 15.3 |
+| **DINO-Max** | **85.55%** | **95.61%** | - | 100% | 812.7s | 471ms | 2.1 |
+| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **532.6s** ✅ | 309ms | 3.2 |
 
-**Note:** Measured on 1725 test images (15 categories total). Hybrid method is **31.4% faster** than DINO-only.
+**Note:** Measured on 1725 test images (15 categories total). Hybrid method is **34.5% faster** than DINO-Max.
 
 ### Result Analysis
 
 **✅ Key Findings:**
 
-1. **Speed Improvement:** Hybrid method is **31.4% faster** than DINO-only (804.2s vs 1171.5s)
+1. **Speed Improvement:** Hybrid method is **34.5% faster** than DINO-Max (532.6s vs 812.7s)
    - This is achieved through an average **50.5% flag rate**
    - Only suspicious images are sent to DINOv2
 
 2. **Localization Quality:** When DINO runs (flagged images), localization quality is **almost identical**
-   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-only)
+   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-Max)
    - Difference is only **0.39 points** - statistically negligible
 
 3. **Trade-off:** End-to-End Pixel AUROC is lower (81.31%) because:
@@ -96,7 +96,7 @@ Average results from comparative experiments on all 15 categories in the MVTec A
 
 4. **Image-Level Performance:**
    - CLIP and Hybrid are the same (82.58%) - because Hybrid uses CLIP scores
-   - DINO-only is slightly better (85.55%) but the difference is small (+2.97 points)
+   - DINO-Max is slightly better (85.55%) but the difference is small (+2.97 points)
 
 ### Performance by Category
 
@@ -107,11 +107,11 @@ Average results from comparative experiments on all 15 categories in the MVTec A
 - Tile: Image 98.9%, Pixel 94.7%, Flag 76.9%
 
 **Challenging Categories (CLIP weak):**
-- Cable: Image 58.9% (DINO: 87.5%), Flag only 32%
-- Capsule: Image 67.9% (DINO: 77.4%), Flag only 24%
-- Screw: Image 53.7% (DINO: 64.2%), Flag only 19%
+- Cable: Image 58.9% (DINO-Max: 87.5%), Flag only 32%
+- Capsule: Image 67.9% (DINO-Max: 77.4%), Flag only 24%
+- Screw: Image 53.7% (DINO-Max: 64.2%), Flag only 19%
 
-**Conclusion:** Hybrid method works excellently in categories where CLIP is strong. For challenging categories (cable, capsule), DINO-only may be preferred.
+**Conclusion:** Hybrid method works excellently in categories where CLIP is strong. For challenging categories (cable, capsule), DINO-Max may be preferred.
 
 ### Threshold Selection (Ablation Study)
 An "Ablation Study" (90%, 93%, 95%, 97%, 99% quantile) was conducted to determine exactly which CLIP Score (Quantile) the Hybrid structure should use to route images to DINOv2. The following table clearly shows how the optimal balance (`0.93 - 93%` Quantile) was selected:
@@ -168,7 +168,7 @@ The system achieves the following analysis and evaluation objectives:
 1. **CLIP-only:** O(N)
    - Constant processing per image
    
-2. **DINO-only:** O(N · P · log(B))
+2. **DINO-Max:** O(N · P · log(B))
    - P patches × k-NN search per image
    
 3. **Hybrid:** O(N) + O(N · α · P · log(B))
@@ -178,11 +178,11 @@ The system achieves the following analysis and evaluation objectives:
 
 ### Empirical Runtime
 
-| Method | Per Category | Total (15 categories) | Per Image | Savings |
-|---|---|---|---|---|
-| CLIP-only | 11.8s | 176.7s | 102ms | - |
-| DINO-only | 78.1s | 1171.5s | 679ms | - |
-| **Hybrid** | **53.6s** | **804.2s** | **466ms** | **-31.4%** ⚡ |
+| Method | Per Category | Total (15 categories) | Per Image | FPS | Savings |
+|---|---|---|---|---|---|
+| CLIP-only | 7.5s | 113.1s | 66ms | 15.3 | - |
+| DINO-Max | 54.2s | 812.7s | 471ms | 2.1 | - |
+| **Hybrid** | **35.5s** | **532.6s** | **309ms** | **3.2** | **-34.5%** ⚡ |
 
 ## Usage
 

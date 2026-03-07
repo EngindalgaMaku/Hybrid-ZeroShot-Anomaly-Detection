@@ -16,7 +16,7 @@ Proje, üç farklı anomali tespit yaklaşımını analiz etmekte ve karşılaş
 2. **CLIP-only Yaklaşım**:
    - Sadece CLIP modelini kullanarak görüntü düzeyinde (image-level) anomali tespiti yapılır. Lokalizasyon sağlamaz ancak hızlı çalışır.
    
-3. **DINO-only Yaklaşım**:
+3. **DINO-Max Yaklaşımı**:
    - Herhangi bir ön filtreleme yapmaksızın sadece DINOv2 modeli kullanılarak piksel düzeyinde anomali tespiti ve lokalizasyon yapılır.
    - **Görüntü-seviye skorlaması** literatür standardı olan **max aggregation** (patch anomaly map'ten maksimum değer) ile hesaplanır.
    - En yüksek hesaplama maliyetine sahiptir fakat en detaylı analizi sunar.
@@ -71,22 +71,22 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 
 | Yöntem | İmaj AUROC | Piksel AUROC (E2E) | Piksel AUROC (Cond) | Flag Rate | Toplam | Per Image | FPS |
 |---|---|---|---|---|---|---|---|
-| **CLIP-only** | **82.58%** | - | - | - | 176.7s | 102ms | 9.8 |
-| **DINO-only** | **85.55%** | **95.61%** | - | 100% | 1171.5s | 679ms | 1.5 |
-| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **804.2s** ✅ | 466ms | 2.1 |
+| **CLIP-only** | **82.58%** | - | - | - | 113.1s | 66ms | 15.3 |
+| **DINO-Max** | **85.55%** | **95.61%** | - | 100% | 812.7s | 471ms | 2.1 |
+| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **532.6s** ✅ | 309ms | 3.2 |
 
-**Not:** 1725 test görüntüsü üzerinden ölçüldü (15 kategori toplam). Hybrid yöntemi DINO-only'e göre **%31.4 daha hızlı**.
+**Not:** 1725 test görüntüsü üzerinden ölçüldü (15 kategori toplam). Hybrid yöntemi DINO-Max'e göre **%34.5 daha hızlı**.
 
 ### Sonuç Analizi
 
 **✅ Ana Bulgular:**
 
-1. **Hız Kazancı:** Hybrid yöntemi, DINO-only'e göre **%31.4 daha hızlı** (804.2s vs 1171.5s)
+1. **Hız Kazancı:** Hybrid yöntemi, DINO-Max'e göre **%34.5 daha hızlı** (532.6s vs 812.7s)
    - Bu, ortalama **%50.5 flag rate** sayesinde elde edilmiştir
    - Sadece şüpheli görüntüler DINOv2'ye gönderilmiştir
 
 2. **Lokalizasyon Kalitesi:** DINO çalıştığında (flagged images) lokalizasyon kalitesi **neredeyse aynı**
-   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-only)
+   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-Max)
    - Fark sadece **0.39 puan** - istatistiksel olarak ihmal edilebilir
 
 3. **Trade-off:** End-to-End Pixel AUROC düşük (81.31%) çünkü:
@@ -96,7 +96,7 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 
 4. **Image-Level Performans:**
    - CLIP ve Hybrid aynı (82.58%) - çünkü Hybrid, CLIP skorlarını kullanıyor
-   - DINO-only biraz daha iyi (85.55%) ama fark küçük (+2.97 puan)
+   - DINO-Max biraz daha iyi (85.55%) ama fark küçük (+2.97 puan)
 
 ### Kategorilere Göre Performans
 
@@ -107,11 +107,11 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 - Tile: Image 98.9%, Pixel 94.7%, Flag 76.9%
 
 **Zorlu Kategoriler (CLIP zayıf):**
-- Cable: Image 58.9% (DINO: 87.5%), Flag sadece %32
-- Capsule: Image 67.9% (DINO: 77.4%), Flag sadece %24
-- Screw: Image 53.7% (DINO: 64.2%), Flag sadece %19
+- Cable: Image 58.9% (DINO-Max: 87.5%), Flag sadece %32
+- Capsule: Image 67.9% (DINO-Max: 77.4%), Flag sadece %24
+- Screw: Image 53.7% (DINO-Max: 64.2%), Flag sadece %19
 
-**Sonuç:** Hybrid yöntemi, CLIP'in güçlü olduğu kategorilerde mükemmel çalışıyor. Zorlu kategorilerde (cable, capsule) DINO-only tercih edilebilir.
+**Sonuç:** Hybrid yöntemi, CLIP'in güçlü olduğu kategorilerde mükemmel çalışıyor. Zorlu kategorilerde (cable, capsule) DINO-Max tercih edilebilir.
 
 ### Eşik Değeri Seçimi (Ablation Study)
 Hybrid yapının tam olarak hangi CLIP Skoruna (Quantile) göre fotoğrafları DINOv2'ye yönlendireceğini belirlemek için sistemde bir "Ablation Taraması" (%90, %93, %95, %97, %99 quantile) gerçekleştirilmiştir. Aşağıdaki tabloda optimal dengenin (`0.93 - %93` Quantile) nasıl seçildiği açıkça görülmektedir:
@@ -168,7 +168,7 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 1. **CLIP-only:** O(N)
    - Her görüntü için sabit işlem
    
-2. **DINO-only:** O(N · P · log(B))
+2. **DINO-Max:** O(N · P · log(B))
    - Her görüntü için P patch × k-NN arama
    
 3. **Hybrid:** O(N) + O(N · α · P · log(B))
@@ -178,11 +178,11 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 
 ### Empirical Runtime
 
-| Yöntem | Per Kategori | Toplam (15 kategori) | Per Image | Tasarruf |
-|---|---|---|---|---|
-| CLIP-only | 11.8s | 176.7s | 102ms | - |
-| DINO-only | 78.1s | 1171.5s | 679ms | - |
-| **Hybrid** | **53.6s** | **804.2s** | **466ms** | **-31.4%** ⚡ |
+| Yöntem | Per Kategori | Toplam (15 kategori) | Per Image | FPS | Tasarruf |
+|---|---|---|---|---|---|
+| CLIP-only | 7.5s | 113.1s | 66ms | 15.3 | - |
+| DINO-Max | 54.2s | 812.7s | 471ms | 2.1 | - |
+| **Hybrid** | **35.5s** | **532.6s** | **309ms** | **3.2** | **-34.5%** ⚡ |
 
 ## Kullanım
 
