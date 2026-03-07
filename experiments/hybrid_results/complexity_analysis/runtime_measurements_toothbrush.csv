@@ -1,0 +1,7 @@
+method,n_images,runtime_s,category
+CLIP,10,0.5576035976409912,toothbrush
+CLIP,20,1.1021618843078613,toothbrush
+DINO,10,4.237683296203613,toothbrush
+DINO,20,8.915316343307495,toothbrush
+Hybrid,10,1.0385494232177734,toothbrush
+Hybrid,20,3.6669156551361084,toothbrush

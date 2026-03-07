@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+capsule,CLIP,0.992,O(N),1.67
+capsule,DINO,0.975,O(N),12.17
+capsule,Hybrid,0.967,O(N),5.23

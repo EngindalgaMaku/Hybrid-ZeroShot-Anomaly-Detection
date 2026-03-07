@@ -1,0 +1,26 @@
+{
+  "category": "metal_nut",
+  "methods": {
+    "CLIP": {
+      "slope": 0.8776207570399363,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 0.8362535635630289,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.042941102284601,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.997198422749838,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.2453987289040696,
+      "complexity_class": "O(N^1.5)",
+      "description": "Superlinear",
+      "avg_runtime_s": 4.200453519821167,
+      "n_samples": 3
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "category": "cable",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9795101250435283,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.4315074284871419,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.0293591328730527,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.80449120203654,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.0805081922287785,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 5.60921049118042,
+      "n_samples": 3
+    }
+  }
+}

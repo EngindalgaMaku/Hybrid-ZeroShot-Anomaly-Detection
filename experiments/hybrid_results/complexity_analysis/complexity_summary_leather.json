@@ -1,0 +1,26 @@
+{
+  "category": "leather",
+  "methods": {
+    "CLIP": {
+      "slope": 1.0190166824008404,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.4308453400929768,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9892474930218653,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.651379028956095,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.9320625314098377,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.81788969039917,
+      "n_samples": 3
+    }
+  }
+}

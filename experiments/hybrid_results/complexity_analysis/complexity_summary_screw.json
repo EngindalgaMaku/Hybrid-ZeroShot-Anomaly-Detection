@@ -1,0 +1,26 @@
+{
+  "category": "screw",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9873323910945965,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 0.9552357991536459,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.0186323046375803,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.937118927637735,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.2000805623322923,
+      "complexity_class": "O(N^1.5)",
+      "description": "Superlinear",
+      "avg_runtime_s": 2.3879640102386475,
+      "n_samples": 3
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "category": "transistor",
+  "methods": {
+    "CLIP": {
+      "slope": 1.041036739166967,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.5405616760253906,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.01372578184358,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.607264995574951,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.7608582592661686,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 6.3421774705251055,
+      "n_samples": 3
+    }
+  }
+}

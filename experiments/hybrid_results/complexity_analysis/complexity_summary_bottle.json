@@ -1,0 +1,26 @@
+{
+  "category": "bottle",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9421773305729564,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 0.8258024056752523,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.0308866251507334,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.336817582448324,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.9995646019672066,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.30385947227478,
+      "n_samples": 3
+    }
+  }
+}

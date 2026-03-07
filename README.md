@@ -69,17 +69,19 @@ Feature'lar L2 normalize edildikten sonra cosine distance ile karşılaştırıl
 
 MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı deney sonuçlarının ortalamaları aşağıda özetlenmiştir. Hibrit yaklaşım için CLIP eşik değeri (threshold quantile) **0.93** olarak seçilmiştir:
 
-| Yöntem | Ortalama İmaj AUROC | Ortalama Piksel AUROC (E2E) | Ortalama Piksel AUROC (Conditional) | Filtrelenen Oran | Runtime (15 kategori) |
-|---|---|---|---|---|---|
-| **CLIP-only** | **82.58%** | - (Lokalizasyon Yok) | - | - | **96.7s** ⚡ |
-| **DINO-only (MAX)** | **85.55%** | **95.61%** | - | %100 (Tümü işlendi) | **786.1s** |
-| **Hybrid (CLIP-gated)** | 82.58% | 81.31% | **95.22%** ⭐ | **50.47%** (Sadece şüpheliler) | **503.8s** ✅ |
+| Yöntem | İmaj AUROC | Piksel AUROC (E2E) | Piksel AUROC (Cond) | Flag Rate | Toplam | Per Image | FPS |
+|---|---|---|---|---|---|---|---|
+| **CLIP-only** | **82.58%** | - | - | - | 176.7s | 102ms | 9.8 |
+| **DINO-only** | **85.55%** | **95.61%** | - | 100% | 1171.5s | 679ms | 1.5 |
+| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **804.2s** ✅ | 466ms | 2.1 |
+
+**Not:** 1725 test görüntüsü üzerinden ölçüldü (15 kategori toplam). Hybrid yöntemi DINO-only'e göre **%31.4 daha hızlı**.
 
 ### Sonuç Analizi
 
 **✅ Ana Bulgular:**
 
-1. **Hız Kazancı:** Hybrid yöntemi, DINO-only'e göre **%36 daha hızlı** (503.8s vs 786.1s)
+1. **Hız Kazancı:** Hybrid yöntemi, DINO-only'e göre **%31.4 daha hızlı** (804.2s vs 1171.5s)
    - Bu, ortalama **%50.5 flag rate** sayesinde elde edilmiştir
    - Sadece şüpheli görüntüler DINOv2'ye gönderilmiştir
 
@@ -176,11 +178,11 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 
 ### Empirical Runtime
 
-| Yöntem | Ortalama (per kategori) | Toplam (15 kategori) | Tasarruf |
-|---|---|---|---|
-| CLIP-only | 6.4s | 96.4s | - |
-| DINO-only | 52.4s | 786.6s | - |
-| **Hybrid** | **33.6s** | **504.6s** | **-36%** ⚡ |
+| Yöntem | Per Kategori | Toplam (15 kategori) | Per Image | Tasarruf |
+|---|---|---|---|---|
+| CLIP-only | 11.8s | 176.7s | 102ms | - |
+| DINO-only | 78.1s | 1171.5s | 679ms | - |
+| **Hybrid** | **53.6s** | **804.2s** | **466ms** | **-31.4%** ⚡ |
 
 ## Kullanım
 

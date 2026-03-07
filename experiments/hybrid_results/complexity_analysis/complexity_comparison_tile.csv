@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+tile,CLIP,1.018,O(N),1.17
+tile,DINO,1.033,O(N),11.57
+tile,Hybrid,0.804,O(N),9.98

@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+grid,CLIP,0.969,O(N),1.03
+grid,DINO,0.994,O(N),11.52
+grid,Hybrid,1.622,O(N^1.5),5.04

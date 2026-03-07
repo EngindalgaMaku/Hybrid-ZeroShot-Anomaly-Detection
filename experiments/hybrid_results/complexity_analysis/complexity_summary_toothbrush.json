@@ -1,0 +1,26 @@
+{
+  "category": "toothbrush",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9830243663381453,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 0.8298827409744263,
+      "n_samples": 2
+    },
+    "DINO": {
+      "slope": 1.0730102183479937,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 6.576499819755554,
+      "n_samples": 2
+    },
+    "Hybrid": {
+      "slope": 1.819997208362956,
+      "complexity_class": "O(N^2)",
+      "description": "Quadratic",
+      "avg_runtime_s": 2.352732539176941,
+      "n_samples": 2
+    }
+  }
+}

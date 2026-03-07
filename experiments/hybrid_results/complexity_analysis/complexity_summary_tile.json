@@ -1,0 +1,26 @@
+{
+  "category": "tile",
+  "methods": {
+    "CLIP": {
+      "slope": 1.0182240172541195,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.1693142255147297,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.0329807503491708,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.571653207143148,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.8037223881460654,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 9.981777429580688,
+      "n_samples": 3
+    }
+  }
+}

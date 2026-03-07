@@ -1,0 +1,3 @@
+Şekil 2. Quantile eşik değerine bağlı olarak hibrit sistemin performans ve hesaplama davranışı.
+(a) Quantile değerine göre Pixel AUROC (E2E) değişimi.
+(b) Quantile değerine göre DINO çalışma oranı.

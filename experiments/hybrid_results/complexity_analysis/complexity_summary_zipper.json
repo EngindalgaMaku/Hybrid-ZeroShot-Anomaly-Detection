@@ -1,0 +1,26 @@
+{
+  "category": "zipper",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9478588003901084,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.028219223022461,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9805163733660073,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.669991890589396,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.559912195495854,
+      "complexity_class": "O(N^1.5)",
+      "description": "Superlinear",
+      "avg_runtime_s": 6.326003392537435,
+      "n_samples": 3
+    }
+  }
+}

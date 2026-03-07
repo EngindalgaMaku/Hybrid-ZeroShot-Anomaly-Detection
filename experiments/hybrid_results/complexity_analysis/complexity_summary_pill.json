@@ -1,0 +1,26 @@
+{
+  "category": "pill",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9797107383078011,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.056580622990926,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 1.0163067033307978,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.882390260696411,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.0097272460858102,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 4.590791304906209,
+      "n_samples": 3
+    }
+  }
+}

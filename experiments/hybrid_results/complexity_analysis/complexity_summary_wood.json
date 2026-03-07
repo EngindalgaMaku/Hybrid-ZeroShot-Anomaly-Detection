@@ -1,0 +1,26 @@
+{
+  "category": "wood",
+  "methods": {
+    "CLIP": {
+      "slope": 1.016886929803819,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.6901066303253174,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9875357499565814,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 12.09283447265625,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.7376864050262469,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.345191558202108,
+      "n_samples": 3
+    }
+  }
+}

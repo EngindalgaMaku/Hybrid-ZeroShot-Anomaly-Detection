@@ -1,0 +1,26 @@
+{
+  "category": "carpet",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9567356424204755,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.714256763458252,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9761873463413109,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.177084922790527,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.879605306893617,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 10.98768393198649,
+      "n_samples": 3
+    }
+  }
+}

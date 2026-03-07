@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+toothbrush,CLIP,0.983,O(N),0.83
+toothbrush,DINO,1.073,O(N),6.58
+toothbrush,Hybrid,1.820,O(N^2),2.35

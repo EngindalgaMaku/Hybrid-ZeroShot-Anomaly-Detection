@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+carpet,CLIP,0.957,O(N),1.71
+carpet,DINO,0.976,O(N),11.18
+carpet,Hybrid,0.880,O(N),10.99

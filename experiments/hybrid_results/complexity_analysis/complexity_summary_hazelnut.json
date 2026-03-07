@@ -1,0 +1,26 @@
+{
+  "category": "hazelnut",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9887189894873492,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.5361301104227703,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9960948447358835,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.463595628738403,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.5771474951988171,
+      "complexity_class": "O(1)",
+      "description": "Constant",
+      "avg_runtime_s": 7.107631762822469,
+      "n_samples": 3
+    }
+  }
+}

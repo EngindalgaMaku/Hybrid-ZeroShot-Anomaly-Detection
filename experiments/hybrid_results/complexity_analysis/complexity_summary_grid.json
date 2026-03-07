@@ -1,0 +1,26 @@
+{
+  "category": "grid",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9690030798931161,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.0288294951121013,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.994392137844583,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 11.51696515083313,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 1.621785223883267,
+      "complexity_class": "O(N^1.5)",
+      "description": "Superlinear",
+      "avg_runtime_s": 5.03568418820699,
+      "n_samples": 3
+    }
+  }
+}

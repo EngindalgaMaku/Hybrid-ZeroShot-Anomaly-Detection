@@ -1,0 +1,4 @@
+Category,Method,Slope,Complexity,Avg_Runtime_s
+transistor,CLIP,1.041,O(N),1.54
+transistor,DINO,1.014,O(N),11.61
+transistor,Hybrid,0.761,O(N),6.34

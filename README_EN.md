@@ -69,17 +69,19 @@ Features are L2 normalized before being compared with cosine distance, which is 
 
 Average results from comparative experiments on all 15 categories in the MVTec AD dataset are summarized below. For the hybrid approach, the CLIP threshold quantile was selected as **0.93**:
 
-| Method | Average Image AUROC | Average Pixel AUROC (E2E) | Average Pixel AUROC (Conditional) | Flagged Ratio | Runtime (15 categories) |
-|---|---|---|---|---|---|
-| **CLIP-only** | **82.58%** | - (No Localization) | - | - | **96.7s** ⚡ |
-| **DINO-only (MAX)** | **85.55%** | **95.61%** | - | 100% (All processed) | **786.1s** |
-| **Hybrid (CLIP-gated)** | 82.58% | 81.31% | **95.22%** ⭐ | **50.47%** (Only suspicious) | **503.8s** ✅ |
+| Method | Image AUROC | Pixel AUROC (E2E) | Pixel AUROC (Cond) | Flag Rate | Total | Per Image | FPS |
+|---|---|---|---|---|---|---|---|
+| **CLIP-only** | **82.58%** | - | - | - | 176.7s | 102ms | 9.8 |
+| **DINO-only** | **85.55%** | **95.61%** | - | 100% | 1171.5s | 679ms | 1.5 |
+| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **804.2s** ✅ | 466ms | 2.1 |
+
+**Note:** Measured on 1725 test images (15 categories total). Hybrid method is **31.4% faster** than DINO-only.
 
 ### Result Analysis
 
 **✅ Key Findings:**
 
-1. **Speed Improvement:** Hybrid method is **36% faster** than DINO-only (503.8s vs 786.1s)
+1. **Speed Improvement:** Hybrid method is **31.4% faster** than DINO-only (804.2s vs 1171.5s)
    - This is achieved through an average **50.5% flag rate**
    - Only suspicious images are sent to DINOv2
 
@@ -176,11 +178,11 @@ The system achieves the following analysis and evaluation objectives:
 
 ### Empirical Runtime
 
-| Method | Average (per category) | Total (15 categories) | Savings |
-|---|---|---|---|
-| CLIP-only | 6.4s | 96.4s | - |
-| DINO-only | 52.4s | 786.6s | - |
-| **Hybrid** | **33.6s** | **504.6s** | **-36%** ⚡ |
+| Method | Per Category | Total (15 categories) | Per Image | Savings |
+|---|---|---|---|---|
+| CLIP-only | 11.8s | 176.7s | 102ms | - |
+| DINO-only | 78.1s | 1171.5s | 679ms | - |
+| **Hybrid** | **53.6s** | **804.2s** | **466ms** | **-31.4%** ⚡ |
 
 ## Usage
 

@@ -1,0 +1,26 @@
+{
+  "category": "capsule",
+  "methods": {
+    "CLIP": {
+      "slope": 0.9921348645917428,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 1.6651269594828289,
+      "n_samples": 3
+    },
+    "DINO": {
+      "slope": 0.9746927782767484,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 12.166035016377768,
+      "n_samples": 3
+    },
+    "Hybrid": {
+      "slope": 0.9665230227466548,
+      "complexity_class": "O(N)",
+      "description": "Linear",
+      "avg_runtime_s": 5.2315371831258135,
+      "n_samples": 3
+    }
+  }
+}
