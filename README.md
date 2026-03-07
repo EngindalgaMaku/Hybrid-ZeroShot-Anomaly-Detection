@@ -104,7 +104,7 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 - Bottle: Image 99.0%, Pixel 98.3%, Flag 73.5%
 - Leather: Image 99.5%, Pixel 98.9%, Flag 79.0%
 - Wood: Image 99.8%, Pixel 94.9%, Flag 77.2%
-- Tile: Image 98.9%, Pixel 94.7%, Flag 76.9%
+- Tile: Image 99.0%, Pixel 94.7%, Flag 76.9%
 
 **Zorlu Kategoriler (CLIP zayıf):**
 - Cable: Image 58.9% (DINO-Max: 87.5%), Flag sadece %32
@@ -174,7 +174,7 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 3. **Hybrid:** O(N) + O(N · α · P · log(B))
    - CLIP gating: O(N)
    - DINOv2 (sadece flagged): O(N · α · P · log(B))
-   - α ≈ 0.49 → **~%50 tasarruf**
+   - α ≈ 0.50 → toplam çalışma süresinde **~%34.5 tasarruf**
 
 ### Empirical Runtime
 

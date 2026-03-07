@@ -1,0 +1,33 @@
+HYBRID per category:
+bottle: img=99.0% flag=73.5% pix_cond=98.3%
+cable: img=58.9% flag=32.0% pix_cond=94.9%
+capsule: img=67.9% flag=24.2% pix_cond=96.2%
+carpet: img=97.3% flag=84.6% pix_cond=98.5%
+grid: img=72.1% flag=52.6% pix_cond=99.4%
+hazelnut: img=86.2% flag=43.6% pix_cond=99.1%
+leather: img=99.5% flag=79.0% pix_cond=98.9%
+metal_nut: img=77.0% flag=38.3% pix_cond=94.2%
+pill: img=72.9% flag=35.9% pix_cond=86.0%
+screw: img=53.7% flag=18.8% pix_cond=96.5%
+tile: img=99.0% flag=76.9% pix_cond=94.7%
+toothbrush: img=86.7% flag=33.3% pix_cond=98.3%
+transistor: img=79.2% flag=34.0% pix_cond=85.5%
+wood: img=99.8% flag=77.2% pix_cond=94.9%
+zipper: img=89.5% flag=53.0% pix_cond=93.0%
+
+DINO-MAX per category:
+bottle: img=94.6% pix_e2e=98.4%
+cable: img=87.5% pix_e2e=94.9%
+capsule: img=77.4% pix_e2e=96.8%
+carpet: img=80.5% pix_e2e=98.5%
+grid: img=98.8% pix_e2e=99.3%
+hazelnut: img=87.5% pix_e2e=99.1%
+leather: img=93.9% pix_e2e=98.9%
+metal_nut: img=92.3% pix_e2e=95.5%
+pill: img=81.6% pix_e2e=87.4%
+screw: img=64.2% pix_e2e=95.5%
+tile: img=88.2% pix_e2e=94.8%
+toothbrush: img=88.9% pix_e2e=98.9%
+transistor: img=79.6% pix_e2e=87.7%
+wood: img=82.8% pix_e2e=94.9%
+zipper: img=85.3% pix_e2e=93.6%
