@@ -159,7 +159,7 @@ The system achieves the following analysis and evaluation objectives:
 **Parameters:**
 - N: Number of test images
 - P: Number of patches per image (~256-1024)
-- B: Patch bank size (~10,000)
+- B: Patch bank size (~12,000)
 - k: Number of k-NN neighbors (k=5)
 - α: Flag rate (0 ≤ α ≤ 1)
 

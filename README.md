@@ -159,7 +159,7 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 **Parametreler:**
 - N: Test görüntü sayısı
 - P: Görüntü başına patch sayısı (~256-1024)
-- B: Patch bank boyutu (~10,000)
+- B: Patch bank boyutu (~12,000)
 - k: k-NN komşu sayısı (k=5)
 - α: Flag rate (0 ≤ α ≤ 1)
 
