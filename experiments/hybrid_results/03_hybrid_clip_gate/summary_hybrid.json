@@ -1,9 +1,9 @@
 {
   "method": "hybrid",
-  "total_runtime_s": 532.5817594528198,
-  "mean_auroc_img": 0.8258385594072901,
-  "mean_auroc_pix_cond": 0.9522195544403081,
-  "mean_auroc_pix_e2e": 0.8130703717736432,
+  "total_runtime_s": 494.9492726325989,
+  "mean_auroc_img": 0.8258210524044891,
+  "mean_auroc_pix_cond": 0.9435286145710489,
+  "mean_auroc_pix_e2e": 0.8073000287473577,
   "mean_flag_rate": 0.5046501699229046,
-  "mean_runtime_s": 35.505049816767375
+  "mean_runtime_s": 32.99641591707866
 }

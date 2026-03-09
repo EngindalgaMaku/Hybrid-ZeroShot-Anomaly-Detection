@@ -135,12 +135,12 @@ Hybrid yapının tam olarak hangi CLIP Skoruna (Quantile) göre fotoğrafları D
 Hibrit anomali tespit pipeline'ının nasıl çalıştığını göstermek adına üretilen 3-panelli kalitatif görseller aşağıdadır. 
 **[Panel 1]** Görüntü ve CLIP Eşik Durumu | **[Panel 2]** Ground Truth Hata Maskesi | **[Panel 3]** DINOv2 Isı Haritası (Heatmap) Lokalizasyonu
 
-![Bottle Anomaly Example](results/qual_panels_balanced/bottle/bottle_00_flagT_clip0.028.png)
-![Capsule Anomaly Example](results/qual_panels_balanced/capsule/capsule_00_flagT_clip0.059.png)
-![Carpet Anomaly Example](results/qual_panels_balanced/carpet/carpet_00_flagT_clip0.046.png)
-![Grid Anomaly Example](results/qual_panels_balanced/grid/grid_00_flagT_clip0.035.png)
+![Bottle Anomaly Example](experiments/hybrid_results/qual_panels_balanced/bottle/bottle_00_flagT_clip0.028.png)
+![Capsule Anomaly Example](experiments/hybrid_results/qual_panels_balanced/capsule/capsule_00_flagT_clip0.059.png)
+![Carpet Anomaly Example](experiments/hybrid_results/qual_panels_balanced/carpet/carpet_00_flagT_clip0.046.png)
+![Grid Anomaly Example](experiments/hybrid_results/qual_panels_balanced/grid/grid_00_flagT_clip0.035.png)
 
-*(Daha fazla görsel örnek ve detay `results/qual_panels_balanced/` dizini altında bulunabilir.)*
+*(Daha fazla görsel örnek ve detay `experiments/hybrid_results/qual_panels_balanced/` dizini altında bulunabilir.)*
 
 ## Çıktılar ve Analiz
 

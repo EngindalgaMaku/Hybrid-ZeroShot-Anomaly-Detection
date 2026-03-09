@@ -1,0 +1,213 @@
+SOURCE: archive/backups\Hybrid-ZeroShot-Anomaly-Detection-LOCAL_before_cells.ipynb, CELL: 27
+
+# ================================================================
+# Qualitative Figure Utilities (Görsel Örnekler için Yardımcılar)
+# ================================================================
+
+"""
+Bu hücrenin görevleri:
+
+1) 3-panelli figür oluşturur:
+   Panel 1: Görüntü + CLIP score/flag
+   Panel 2: Ground truth maske
+   Panel 3: DINO heatmap overlay
+
+2) Kategoriden otomatik örnek seçer:
+   - flagged=True örnekler (CLIP, DINO'yu devreye soktu)
+   - flagged=False örnekler (CLIP reddetti; force_dino=True ile
+     DINO'nun ne gördüğü gösterilebilir)
+
+3) Figürleri OUT_ROOT altına PNG ve PDF olarak kaydeder
+
+Bağımlılıklar:
+- Önceki hücrelerdeki fonksiyonlar (get_mvtec_paths, load_image_rgb,
+  load_mask, CLIP ve DINOv2 fonksiyonları)
+
+Makale için kullanım:
+- force_dino=True: "CLIP reddetse bile DINO ne görüyor?" analizi
+- force_dino=False: Pipeline'ın gerçek davranışı
+"""
+
+import os
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_qual_panel(pil_img, gt_mask, heatmap, clip_score, flagged,
+                    label=None, save_path=None):
+    """
+    3-panelli görsel oluştur ve kaydet.
+    
+    Args:
+        pil_img: PIL Image objesi
+        gt_mask: Ground truth maske (numpy array)
+        heatmap: DINOv2 anomali haritası
+        clip_score: CLIP anomali skoru
+        flagged: CLIP flagged durumu (True/False)
+        label: Görüntü label'ı (0=normal, 1=anomali)
+        save_path: Kayıt yolu (.png uzantılı ise .pdf de oluşturulur)
+        
+    Returns:
+        matplotlib figure objesi
+        
+    Panel açıklaması:
+      [0] Orijinal görüntü + metrikler
+      [1] Ground truth maske
+      [2] DINOv2 heatmap overlay
+    """
+    img_np = np.array(pil_img)
+
+    fig, axes = plt.subplots(1, 3, figsize=(12.5, 3.3))
+
+    # Panel 1: Image + metadata
+    axes[0].imshow(img_np)
+    title = f"Image (CLIP={clip_score:.3f}, flagged={flagged})"
+    if label is not None:
+        # label: 0 normal, 1 anomaly
+        title = f"Image (y={label}, CLIP={clip_score:.3f}, flagged={flagged})"
+    axes[0].set_title(title)
+    axes[0].axis("off")
+
+    # Panel 2: GT mask
+    if gt_mask is None:
+        # gösterim için boş maske
+        axes[1].imshow(np.zeros((img_np.shape[0], img_np.shape[1])), cmap="gray")
+        axes[1].set_title("GT Mask (None)")
+    else:
+        axes[1].imshow(gt_mask, cmap="gray")
+        axes[1].set_title("GT Mask")
+    axes[1].axis("off")
+
+    # Panel 3: Heatmap overlay
+    axes[2].imshow(img_np)
+    if heatmap is not None:
+        axes[2].imshow(heatmap, cmap="jet", alpha=0.45)
+    axes[2].set_title("DINOv2 Heatmap")
+    axes[2].axis("off")
+
+    plt.tight_layout()
+
+    if save_path is not None:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        fig.savefig(save_path, dpi=220, bbox_inches="tight")
+        print(f"   💾 Kaydedildi: {os.path.basename(save_path)}")
+        
+        if save_path.lower().endswith(".png"):
+            pdf_path = save_path[:-4] + ".pdf"
+            fig.savefig(pdf_path, bbox_inches="tight")
+            print(f"   📄 PDF: {os.path.basename(pdf_path)}")
+    
+    # Figürü göster ve kapat (memory için)
+    plt.show()
+    plt.close(fig)
+    
+    return fig
+
+
+def select_masked_anomalies(test_items):
+    """
+    Ground truth maske'si olan anomali görüntülerini seç.
+    
+    Args:
+        test_items: Test görüntüleri listesi [(path, label, mask_path)]
+        
+    Returns:
+        Mask'li anomali görüntüleri listesi
+    """
+    return [(p, y, m) for (p, y, m) in test_items
+            if y == 1 and (m is not None and os.path.exists(m))]
+
+
+def export_qual_examples_balanced(category,
+                                  clip_ref_max=50,
+                                  clip_thr_quantile=0.93,
+                                  dino_ref_imgs=30,
+                                  dino_patches_per_img=400,
+                                  dino_coreset=12000,
+                                  knn_k=5,
+                                  eval_size=256,
+                                  n_flagged_true=3,
+                                  n_flagged_false=3,
+                                  force_dino=True,
+                                  seed=0,
+                                  out_dir=None):
+    """
+    Kategoriden otomatik örnek seçer ve figürleri kaydeder.
+
+    Seçim mantığı:
+      - Sadece mask'i olan anomaly örnekleri arasından seçer.
+      - Önce CLIP score ve flagged hesaplanır.
+      - flagged=True ve flagged=False havuzlarından istenen sayıda örnek çekilir.
+      - force_dino=True ise flagged=False örneklerde de DINO heatmap üretilir (analiz/figür amaçlı).
+      - force_dino=False ise pipeline davranışı: flagged=False -> heatmap üretilmez (None).
+
+    Çıktı:
+      - OUT_ROOT/qual_panels/<category>/... altında PNG + PDF dosyaları
+    """
+    if out_dir is None:
+        out_dir = os.path.join(OUT_ROOT, "qual_panels_balanced", category)
+
+    random.seed(seed)
+    np.random.seed(seed)
+
+    # ---- paths
+    train_good, test_items = get_mvtec_paths(MVTEC_ROOT, category)
+
+    # ---- CLIP init
+    clip_ref = build_clip_reference(train_good, max_images=clip_ref_max)
+    clip_thr = estimate_clip_threshold(train_good, clip_ref,
+                                       max_images=clip_ref_max,
+                                       quantile=clip_thr_quantile)
+
+    # ---- DINO init (tek sefer)
+    patch_bank = build_dino_patch_bank(train_good,
+                                       max_images=dino_ref_imgs,
+                                       max_patches_per_image=dino_patches_per_img)
+    bank_cs = coreset_subsample(patch_bank, target_size=dino_coreset, seed=0)
+    nn_index = build_knn_index(bank_cs, k=knn_k)
+
+    # ---- candidate pool (masked anomalies)
+    candidates = select_masked_anomalies(test_items)
+    if len(candidates) == 0:
+        print("No masked anomalies found for:", category)
+        return []
+
+    # ---- compute CLIP score & split by flagged
+    pool_true, pool_false = [], []
+    for (img_path, label, mask_path) in tqdm(candidates, desc=f"Scoring candidates {category}"):
+        img = load_image_rgb(img_path, resize=None)
+        s = float(clip_anomaly_score(img, clip_ref))
+        flagged = (s > clip_thr)
+        rec = (img_path, label, mask_path, s, flagged)
+        (pool_true if flagged else pool_false).append(rec)
+
+    random.shuffle(pool_true)
+    random.shuffle(pool_false)
+
+    chosen = []
+    chosen += pool_true[:n_flagged_true]
+    chosen += pool_false[:n_flagged_false]
+
+    print(f"[{category}] candidates: flagged=True {len(pool_true)}, flagged=False {len(pool_false)}")
+    print(f"[{category}] chosen: flagged=True {min(n_flagged_true,len(pool_true))}, flagged=False {min(n_flagged_false,len(pool_false))}")
+    print(f"force_dino={force_dino} (False ise flagged=False örnekte heatmap üretilmez)")
+
+    saved = []
+    for i, (img_path, label, mask_path, clip_score, flagged) in enumerate(chosen):
+        img = load_image_rgb(img_path, resize=None)
+        gt = load_mask(mask_path, resize=eval_size)
+
+        if force_dino or flagged:
+            hm = dino_anomaly_map_knn(img, nn_index, k=knn_k, out_size=eval_size)
+        else:
+            hm = None
+
+        # dosya adı: T/F + score ile
+        tag = "T" if flagged else "F"
+        save_path = os.path.join(out_dir, f"{category}_{i:02d}_flag{tag}_clip{clip_score:.3f}.png")
+
+        plot_qual_panel(img, gt, hm, clip_score, flagged, label=label, save_path=save_path)
+        saved.append(save_path)
+        print("Saved:", save_path)
+
+    return saved

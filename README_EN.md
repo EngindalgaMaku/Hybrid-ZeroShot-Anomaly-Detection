@@ -135,12 +135,12 @@ An "Ablation Study" (90%, 93%, 95%, 97%, 99% quantile) was conducted to determin
 The following are 3-panel qualitative visualizations produced to demonstrate how the hybrid anomaly detection pipeline works. 
 **[Panel 1]** Image and CLIP Threshold Status | **[Panel 2]** Ground Truth Error Mask | **[Panel 3]** DINOv2 Heatmap Localization
 
-![Bottle Anomaly Example](results/qual_panels_balanced/bottle/bottle_00_flagT_clip0.028.png)
-![Capsule Anomaly Example](results/qual_panels_balanced/capsule/capsule_00_flagT_clip0.059.png)
-![Carpet Anomaly Example](results/qual_panels_balanced/carpet/carpet_00_flagT_clip0.046.png)
-![Grid Anomaly Example](results/qual_panels_balanced/grid/grid_00_flagT_clip0.035.png)
+![Bottle Anomaly Example](experiments/hybrid_results/qual_panels_balanced/bottle/bottle_00_flagT_clip0.028.png)
+![Capsule Anomaly Example](experiments/hybrid_results/qual_panels_balanced/capsule/capsule_00_flagT_clip0.059.png)
+![Carpet Anomaly Example](experiments/hybrid_results/qual_panels_balanced/carpet/carpet_00_flagT_clip0.046.png)
+![Grid Anomaly Example](experiments/hybrid_results/qual_panels_balanced/grid/grid_00_flagT_clip0.035.png)
 
-*(More visual examples and details can be found in the `results/qual_panels_balanced/` directory.)*
+*(More visual examples and details can be found in the `experiments/hybrid_results/qual_panels_balanced/` directory.)*
 
 ## Outputs and Analysis
 
