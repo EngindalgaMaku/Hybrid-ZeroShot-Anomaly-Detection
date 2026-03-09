@@ -2,24 +2,24 @@
   "category": "zipper",
   "methods": {
     "CLIP": {
-      "slope": 0.9154755789527729,
+      "slope": 0.9601752968042417,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 0.764009952545166,
+      "avg_runtime_s": 0.8603490193684896,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0416311478968667,
+      "slope": 1.0339648001899313,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.918514410654703,
+      "avg_runtime_s": 11.028065284093222,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 1.5573244463969933,
+      "slope": 1.614174874896201,
       "complexity_class": "O(N^1.5)",
       "description": "Superlinear",
-      "avg_runtime_s": 6.09536878267924,
+      "avg_runtime_s": 5.886662244796753,
       "n_samples": 3
     }
   }

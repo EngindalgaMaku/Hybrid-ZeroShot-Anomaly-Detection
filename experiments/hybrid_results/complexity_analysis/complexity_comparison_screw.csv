@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-screw,CLIP,1.032,O(N),0.74
-screw,DINO,1.026,O(N),10.60
-screw,Hybrid,1.226,O(N^1.5),2.24
+screw,CLIP,0.994,O(N),0.92
+screw,DINO,1.012,O(N),12.64
+screw,Hybrid,1.200,O(N),2.59

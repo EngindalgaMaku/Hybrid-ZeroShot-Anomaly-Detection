@@ -2,24 +2,24 @@
   "category": "tile",
   "methods": {
     "CLIP": {
-      "slope": 1.0211971600093837,
+      "slope": 0.9998794972940384,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.1853509744008381,
+      "avg_runtime_s": 1.2116152445475261,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0266306458710275,
+      "slope": 1.02943537643339,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.365602731704712,
+      "avg_runtime_s": 12.891787767410278,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.8009047188896158,
+      "slope": 0.8009517184663938,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 9.855580965677897,
+      "avg_runtime_s": 10.780593872070312,
       "n_samples": 3
     }
   }

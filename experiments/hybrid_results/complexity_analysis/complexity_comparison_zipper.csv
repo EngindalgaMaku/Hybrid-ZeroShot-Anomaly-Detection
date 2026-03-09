@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-zipper,CLIP,0.915,O(N),0.76
-zipper,DINO,1.042,O(N),10.92
-zipper,Hybrid,1.557,O(N^1.5),6.10
+zipper,CLIP,0.960,O(N),0.86
+zipper,DINO,1.034,O(N),11.03
+zipper,Hybrid,1.614,O(N^1.5),5.89

@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-cable,CLIP,1.018,O(N),1.26
-cable,DINO,1.017,O(N),10.95
-cable,Hybrid,1.057,O(N),5.25
+cable,CLIP,0.973,O(N),1.48
+cable,DINO,1.036,O(N),11.53
+cable,Hybrid,1.081,O(N),5.66

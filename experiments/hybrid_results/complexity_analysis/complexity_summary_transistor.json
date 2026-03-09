@@ -2,24 +2,24 @@
   "category": "transistor",
   "methods": {
     "CLIP": {
-      "slope": 1.0338405171362461,
+      "slope": 1.0356227896244268,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.4838236967722576,
+      "avg_runtime_s": 1.6446394125620525,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.01621040499805,
+      "slope": 0.9381792903313775,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.495208819707235,
+      "avg_runtime_s": 12.1704683303833,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.7479792142488171,
+      "slope": 0.7840444170497715,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 5.734613577524821,
+      "avg_runtime_s": 5.916825691858928,
       "n_samples": 3
     }
   }

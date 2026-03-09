@@ -2,24 +2,24 @@
   "category": "hazelnut",
   "methods": {
     "CLIP": {
-      "slope": 1.017932233356725,
+      "slope": 0.9802517693773247,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.3517014980316162,
+      "avg_runtime_s": 1.4276870091756184,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0188000198674563,
+      "slope": 1.0338304936517047,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.45966068903605,
+      "avg_runtime_s": 11.769770781199137,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.5929714828084761,
+      "slope": 0.6070401469802893,
       "complexity_class": "O(1)",
       "description": "Constant",
-      "avg_runtime_s": 7.076035261154175,
+      "avg_runtime_s": 7.137691259384155,
       "n_samples": 3
     }
   }

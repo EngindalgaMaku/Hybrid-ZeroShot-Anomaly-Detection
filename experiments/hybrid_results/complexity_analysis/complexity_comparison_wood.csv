@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-wood,CLIP,1.042,O(N),1.39
-wood,DINO,1.027,O(N),11.36
-wood,Hybrid,0.738,O(N),9.19
+wood,CLIP,0.978,O(N),1.53
+wood,DINO,1.025,O(N),11.94
+wood,Hybrid,0.743,O(N),9.71

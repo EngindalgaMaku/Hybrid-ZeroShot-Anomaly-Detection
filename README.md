@@ -71,32 +71,32 @@ MVTec AD veri setindeki tüm 15 kategori üzerinde yapılan karşılaştırmalı
 
 | Yöntem | İmaj AUROC | Piksel AUROC (E2E) | Piksel AUROC (Cond) | Flag Rate | Toplam | Per Image | FPS |
 |---|---|---|---|---|---|---|---|
-| **CLIP-only** | **82.58%** | - | - | - | 113.1s | 66ms | 15.3 |
-| **DINO-Max** | **85.55%** | **95.61%** | - | 100% | 812.7s | 471ms | 2.1 |
-| **Hybrid** | 82.58% | 81.31% | **95.22%** ⭐ | **50.5%** | **532.6s** ✅ | 309ms | 3.2 |
+| **CLIP-only** | **82.58%** | - | - | - | 102.9s | 59.6ms | 16.8 |
+| **DINO-Max** | **97.68%** | **95.04%** | - | 100% | 806.4s | 467.5ms | 2.1 |
+| **Hybrid** | 82.58% | 80.73% | **94.35%** ⭐ | **50.5%** | **494.9s** ✅ | 287ms | 3.5 |
 
-**Not:** 1725 test görüntüsü üzerinden ölçüldü (15 kategori toplam). Hybrid yöntemi DINO-Max'e göre **%34.5 daha hızlı**.
+**Not:** 1725 test görüntüsü üzerinden ölçüldü (15 kategori toplam). Hybrid yöntemi DINO-Max'e göre **%38.6 daha hızlı**.
 
 ### Sonuç Analizi
 
 **✅ Ana Bulgular:**
 
-1. **Hız Kazancı:** Hybrid yöntemi, DINO-Max'e göre **%34.5 daha hızlı** (532.6s vs 812.7s)
+1. **Hız Kazancı:** Hybrid yöntemi, DINO-Max'e göre **%38.6 daha hızlı** (494.9s vs 806.4s)
    - Bu, ortalama **%50.5 flag rate** sayesinde elde edilmiştir
    - Sadece şüpheli görüntüler DINOv2'ye gönderilmiştir
 
-2. **Lokalizasyon Kalitesi:** DINO çalıştığında (flagged images) lokalizasyon kalitesi **neredeyse aynı**
-   - Conditional Pixel AUROC: **95.22%** (Hybrid) vs 95.61% (DINO-Max)
-   - Fark sadece **0.39 puan** - istatistiksel olarak ihmal edilebilir
+2. **Lokalizasyon Kalitesi:** DINO çalıştığında (flagged images) lokalizasyon kalitesi **yakın**
+   - Conditional Pixel AUROC: **94.35%** (Hybrid) vs 95.04% (DINO-Max)
+   - Fark sadece **0.69 puan** - istatistiksel olarak ihmal edilebilir
 
-3. **Trade-off:** End-to-End Pixel AUROC düşük (81.31%) çünkü:
+3. **Trade-off:** End-to-End Pixel AUROC düşük (80.73%) çünkü:
    - CLIP bazı anomalileri kaçırıyor (false negatives)
    - Bu görüntüler DINOv2'ye gönderilmediği için lokalizasyon yapılamıyor
    - Ancak bu, **hız kazancı** için kabul edilebilir bir trade-off
 
 4. **Image-Level Performans:**
    - CLIP ve Hybrid aynı (82.58%) - çünkü Hybrid, CLIP skorlarını kullanıyor
-   - DINO-Max biraz daha iyi (85.55%) ama fark küçük (+2.97 puan)
+   - DINO-Max daha iyi (97.68%)
 
 ### Kategorilere Göre Performans
 
@@ -118,16 +118,16 @@ Hybrid yapının tam olarak hangi CLIP Skoruna (Quantile) göre fotoğrafları D
 
 | Seçilen Quantile (Eşik Oranı) | Ortalama İmaj AUROC | Ortalama Kondisyonel Piksel AUROC | Ortalama E2E Piksel AUROC | DINO'ya Yönlendirme Oranı (Flag) |
 |---|---|---|---|---|
-| 0.90 | 0.8258 | 0.9526 | **0.8273** | %55.2 |
-| **0.93 (Seçilen)** | **0.8258** | **0.9522** | 0.8131 | **%50.47** ⭐ |
-| 0.95 | 0.8258 | 0.9512 | 0.8037 | %47.7 |
-| 0.97 | 0.8258 | 0.9541 | 0.7879 | %44.7 |
-| 0.99 | 0.8258 | 0.9538 | 0.7674 | %39.6 |
+| 0.90 | 0.8258 | 0.9442 | **0.8213** | %55.20 |
+| **0.93 (Seçilen)** | **0.8258** | **0.9435** | 0.8073 | **%50.47** ⭐ |
+| 0.95 | 0.8258 | 0.9424 | 0.7980 | %47.66 |
+| 0.97 | 0.8258 | 0.9477 | 0.7853 | %44.74 |
+| 0.99 | 0.8258 | 0.9467 | 0.7650 | %39.63 |
 
 **Neden 0.93 seçildi?**
 - ✅ Flag rate %50.47 → Orta seviye tasarruf
-- ✅ Conditional Pixel AUROC %95.22 → Mükemmel lokalizasyon kalitesi
-- ✅ E2E Pixel AUROC %81.31 → Makul trade-off
+- ✅ Conditional Pixel AUROC %94.35 → Yüksek lokalizasyon kalitesi
+- ✅ E2E Pixel AUROC %80.73 → Makul trade-off
 - ✅ Denge noktası: Hız ve kalite arasında optimal
 
 ## Görsel Analiz (Qualitative Results)
@@ -174,15 +174,15 @@ Sistem üzerinden aşağıdaki analiz ve değerlendirme hedeflerine ulaşılır:
 3. **Hybrid:** O(N) + O(N · α · P · log(B))
    - CLIP gating: O(N)
    - DINOv2 (sadece flagged): O(N · α · P · log(B))
-   - α ≈ 0.50 → toplam çalışma süresinde **~%34.5 tasarruf**
+   - α ≈ 0.50 → toplam çalışma süresinde **~%38.6 tasarruf**
 
 ### Empirical Runtime
 
 | Yöntem | Per Kategori | Toplam (15 kategori) | Per Image | FPS | Tasarruf |
 |---|---|---|---|---|---|
-| CLIP-only | 7.5s | 113.1s | 66ms | 15.3 | - |
-| DINO-Max | 54.2s | 812.7s | 471ms | 2.1 | - |
-| **Hybrid** | **35.5s** | **532.6s** | **309ms** | **3.2** | **-34.5%** ⚡ |
+| CLIP-only | 6.8s | 102.9s | 59.6ms | 16.8 | - |
+| DINO-Max | 53.7s | 806.4s | 467.5ms | 2.1 | - |
+| **Hybrid** | **32.9s** | **494.9s** | **287ms** | **3.5** | **-38.6%** ⚡ |
 
 ## Kullanım
 

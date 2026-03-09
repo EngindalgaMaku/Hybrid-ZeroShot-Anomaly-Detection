@@ -2,24 +2,24 @@
   "category": "cable",
   "methods": {
     "CLIP": {
-      "slope": 1.0178213712815443,
+      "slope": 0.9728098227937425,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.25985852877299,
+      "avg_runtime_s": 1.4772884051005046,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0173235921186008,
+      "slope": 1.035720582676107,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.947902043660482,
+      "avg_runtime_s": 11.528965393702189,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 1.0568128138781798,
+      "slope": 1.080503105364483,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 5.247880697250366,
+      "avg_runtime_s": 5.663546323776245,
       "n_samples": 3
     }
   }

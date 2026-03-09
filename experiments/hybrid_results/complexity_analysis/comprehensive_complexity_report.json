@@ -1,10 +1,35 @@
 {
-  "analysis_date": "2026-03-08 22:46:45.385060",
+  "analysis_date": "2026-03-09 11:37:17.315348",
   "n_categories": 15,
   "test_counts": [
     10,
     20,
     50
   ],
-  "methods": {}
+  "methods": {
+    "CLIP": {
+      "avg_slope": 0.994393316125781,
+      "min_slope": 0.9379690962397167,
+      "max_slope": 1.0718685959161036,
+      "std_slope": 0.034264271791426416,
+      "n_categories": 15,
+      "complexity_class": "O(N)"
+    },
+    "DINO": {
+      "avg_slope": 1.038027189605126,
+      "min_slope": 0.9381792903313775,
+      "max_slope": 1.129447811378296,
+      "std_slope": 0.041317835032864535,
+      "n_categories": 15,
+      "complexity_class": "O(N)"
+    },
+    "Hybrid": {
+      "avg_slope": 1.1101688466079802,
+      "min_slope": 0.6070401469802893,
+      "max_slope": 2.0329267103279243,
+      "std_slope": 0.3938353201424737,
+      "n_categories": 15,
+      "complexity_class": "O(N)"
+    }
+  }
 }

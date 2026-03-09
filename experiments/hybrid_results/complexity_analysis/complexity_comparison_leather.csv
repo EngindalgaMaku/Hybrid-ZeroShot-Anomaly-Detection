@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-leather,CLIP,1.036,O(N),1.38
-leather,DINO,1.020,O(N),11.32
-leather,Hybrid,0.986,O(N),11.58
+leather,CLIP,0.958,O(N),1.36
+leather,DINO,1.045,O(N),11.96
+leather,Hybrid,0.975,O(N),11.85

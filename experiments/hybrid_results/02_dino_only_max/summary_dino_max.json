@@ -1,7 +1,7 @@
 {
   "method": "dino_max",
-  "total_runtime_s": 806.3619866371155,
+  "total_runtime_s": 784.7884845733643,
   "mean_auroc_img": 0.9767562591847337,
   "mean_auroc_pix_e2e": 0.9504282145803487,
-  "mean_runtime_s": 53.75550498962402
+  "mean_runtime_s": 52.31760028203328
 }

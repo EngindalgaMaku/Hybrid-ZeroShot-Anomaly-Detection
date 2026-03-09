@@ -2,24 +2,24 @@
   "category": "capsule",
   "methods": {
     "CLIP": {
-      "slope": 1.0084872357077737,
+      "slope": 0.975691120553445,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.282853364944458,
+      "avg_runtime_s": 1.448891003926595,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.04992123147717,
+      "slope": 0.9983162466093617,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.11484169960022,
+      "avg_runtime_s": 11.311548948287964,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.9526960134603158,
+      "slope": 0.9271614295460625,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 5.055573622385661,
+      "avg_runtime_s": 4.4732772509257,
       "n_samples": 3
     }
   }

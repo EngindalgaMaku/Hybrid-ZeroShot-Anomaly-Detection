@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-bottle,CLIP,0.985,O(N),0.93
-bottle,DINO,1.031,O(N),10.58
-bottle,Hybrid,0.962,O(N),10.42
+bottle,CLIP,1.004,O(N),0.97
+bottle,DINO,1.059,O(N),10.84
+bottle,Hybrid,0.978,O(N),10.59

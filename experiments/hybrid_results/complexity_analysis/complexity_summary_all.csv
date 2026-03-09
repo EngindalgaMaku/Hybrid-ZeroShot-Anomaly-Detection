@@ -1,1 +1,4 @@
-
+Method,Avg_Slope,Min_Slope,Max_Slope,Complexity,N_Categories
+CLIP,0.994,0.938,1.072,O(N),15
+DINO,1.038,0.938,1.129,O(N),15
+Hybrid,1.110,0.607,2.033,O(N),15

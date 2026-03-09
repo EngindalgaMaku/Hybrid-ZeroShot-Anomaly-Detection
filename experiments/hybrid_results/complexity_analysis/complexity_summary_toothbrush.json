@@ -2,24 +2,24 @@
   "category": "toothbrush",
   "methods": {
     "CLIP": {
-      "slope": 1.0125116147637396,
+      "slope": 0.9379690962397167,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 0.71950364112854,
+      "avg_runtime_s": 0.8349050283432007,
       "n_samples": 2
     },
     "DINO": {
-      "slope": 1.0786787849380783,
+      "slope": 1.0523510654238328,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 6.4190064668655396,
+      "avg_runtime_s": 7.015312552452087,
       "n_samples": 2
     },
     "Hybrid": {
-      "slope": 1.866944139731028,
+      "slope": 2.0329267103279243,
       "complexity_class": "O(N^2)",
       "description": "Quadratic",
-      "avg_runtime_s": 2.3103764057159424,
+      "avg_runtime_s": 2.6224400997161865,
       "n_samples": 2
     }
   }

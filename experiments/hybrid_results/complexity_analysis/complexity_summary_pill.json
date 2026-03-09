@@ -2,24 +2,24 @@
   "category": "pill",
   "methods": {
     "CLIP": {
-      "slope": 0.9878232679929789,
+      "slope": 1.0103493991529497,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.0203335285186768,
+      "avg_runtime_s": 1.0070842107137044,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0091468415523182,
+      "slope": 1.083612922590302,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.953806241353353,
+      "avg_runtime_s": 11.570122798283895,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.9789496687082627,
+      "slope": 1.0005206225915315,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 4.5827271938323975,
+      "avg_runtime_s": 5.296623865763347,
       "n_samples": 3
     }
   }

@@ -2,24 +2,24 @@
   "category": "leather",
   "methods": {
     "CLIP": {
-      "slope": 1.03610911013305,
+      "slope": 0.9575899290280286,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 1.3796007633209229,
+      "avg_runtime_s": 1.3628191153208415,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.0202993630302595,
+      "slope": 1.0452140001552481,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.32492200533549,
+      "avg_runtime_s": 11.956126769383749,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.9860009779475917,
+      "slope": 0.9749408725043816,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.581231753031412,
+      "avg_runtime_s": 11.852451165517172,
       "n_samples": 3
     }
   }

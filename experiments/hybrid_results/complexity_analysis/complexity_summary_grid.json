@@ -2,24 +2,24 @@
   "category": "grid",
   "methods": {
     "CLIP": {
-      "slope": 1.0197385168444046,
+      "slope": 1.0718685959161036,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 0.9067435264587402,
+      "avg_runtime_s": 0.856004556020101,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 0.9448568064679467,
+      "slope": 1.0386854642403487,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 11.148664553960165,
+      "avg_runtime_s": 11.468006531397501,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 1.676449043997507,
+      "slope": 1.675551468889767,
       "complexity_class": "O(N^1.5)",
       "description": "Superlinear",
-      "avg_runtime_s": 4.694443066914876,
+      "avg_runtime_s": 4.98335878054301,
       "n_samples": 3
     }
   }

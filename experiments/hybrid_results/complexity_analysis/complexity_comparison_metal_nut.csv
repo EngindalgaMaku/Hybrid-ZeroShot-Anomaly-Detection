@@ -1,4 +1,4 @@
 Category,Method,Slope,Complexity,Avg_Runtime_s
-metal_nut,CLIP,0.998,O(N),0.63
-metal_nut,DINO,1.062,O(N),10.80
-metal_nut,Hybrid,1.259,O(N^1.5),4.16
+metal_nut,CLIP,1.009,O(N),0.72
+metal_nut,DINO,1.055,O(N),10.59
+metal_nut,Hybrid,1.299,O(N^1.5),3.90

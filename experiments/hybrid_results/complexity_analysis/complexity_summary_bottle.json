@@ -2,24 +2,24 @@
   "category": "bottle",
   "methods": {
     "CLIP": {
-      "slope": 0.984754611320621,
+      "slope": 1.0039744563247597,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 0.9324036439259847,
+      "avg_runtime_s": 0.9710333347320557,
       "n_samples": 3
     },
     "DINO": {
-      "slope": 1.031389633825973,
+      "slope": 1.0588175840611285,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.578522523244223,
+      "avg_runtime_s": 10.835915724436441,
       "n_samples": 3
     },
     "Hybrid": {
-      "slope": 0.9619346873670056,
+      "slope": 0.9780842399312097,
       "complexity_class": "O(N)",
       "description": "Linear",
-      "avg_runtime_s": 10.418678363164267,
+      "avg_runtime_s": 10.592410326004028,
       "n_samples": 3
     }
   }
